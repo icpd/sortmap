@@ -28,30 +28,30 @@ func (a ByPair[Key]) Len() int           { return len(a.Pairs) }
 func (a ByPair[Key]) Swap(i, j int)      { a.Pairs[i], a.Pairs[j] = a.Pairs[j], a.Pairs[i] }
 func (a ByPair[Key]) Less(i, j int) bool { return a.LessFunc(a.Pairs[i], a.Pairs[j]) }
 
-type sortMap[Key comparable] struct {
+type SortMap[Key comparable] struct {
 	keys       []Key
 	values     map[Key]any
 	escapeHTML bool
 }
 
-func New[Key comparable]() *sortMap[Key] {
-	return &sortMap[Key]{
+func New[Key comparable]() *SortMap[Key] {
+	return &SortMap[Key]{
 		keys:       []Key{},
 		values:     make(map[Key]any),
 		escapeHTML: true,
 	}
 }
 
-func (o *sortMap[Key]) SetEscapeHTML(on bool) {
+func (o *SortMap[Key]) SetEscapeHTML(on bool) {
 	o.escapeHTML = on
 }
 
-func (o *sortMap[Key]) Get(key Key) (any, bool) {
+func (o *SortMap[Key]) Get(key Key) (any, bool) {
 	val, exists := o.values[key]
 	return val, exists
 }
 
-func (o *sortMap[Key]) Set(key Key, value any) {
+func (o *SortMap[Key]) Set(key Key, value any) {
 	_, exists := o.values[key]
 	if !exists {
 		o.keys = append(o.keys, key)
@@ -59,7 +59,7 @@ func (o *sortMap[Key]) Set(key Key, value any) {
 	o.values[key] = value
 }
 
-func (o *sortMap[Key]) Delete(key Key) {
+func (o *SortMap[Key]) Delete(key Key) {
 	_, ok := o.values[key]
 	if !ok {
 		return
@@ -77,17 +77,17 @@ func (o *sortMap[Key]) Delete(key Key) {
 	delete(o.values, key)
 }
 
-func (o *sortMap[Key]) Keys() []Key {
+func (o *SortMap[Key]) Keys() []Key {
 	return o.keys
 }
 
 // SortKeys Sort the map keys using your sort func
-func (o *sortMap[Key]) SortKeys(sortFunc func(keys []Key)) {
+func (o *SortMap[Key]) SortKeys(sortFunc func(keys []Key)) {
 	sortFunc(o.keys)
 }
 
 // Sort the map using your sort func
-func (o *sortMap[Key]) Sort(lessFunc func(a *pair[Key], b *pair[Key]) bool) {
+func (o *SortMap[Key]) Sort(lessFunc func(a *pair[Key], b *pair[Key]) bool) {
 	pairs := make([]*pair[Key], len(o.keys))
 	for i, key := range o.keys {
 		pairs[i] = &pair[Key]{key, o.values[key]}
@@ -100,7 +100,7 @@ func (o *sortMap[Key]) Sort(lessFunc func(a *pair[Key], b *pair[Key]) bool) {
 	}
 }
 
-func (o sortMap[Key]) MarshalJSON() ([]byte, error) {
+func (o SortMap[Key]) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
 	buf.WriteByte('{')
 	encoder := json.NewEncoder(&buf)
