@@ -5,7 +5,7 @@ import (
 )
 
 func TestSortMap(t *testing.T) {
-	strMap := New[string]()
+	strMap := New[string, any]()
 	// number
 	strMap.Set("number", 3)
 	v, _ := strMap.Get("number")
@@ -77,16 +77,16 @@ func TestSortMap(t *testing.T) {
 		t.Error("Delete did not remove 'strings' key")
 	}
 
-	intMap := New[int]()
+	intMap := New[int, string]()
 	intMap.Set(2, "a")
 	v, _ = intMap.Get(2)
-	if v.(string) != "a" {
+	if v != "a" {
 		t.Error("Set 1")
 	}
 
 	intMap.Set(1, "b")
 	v, _ = intMap.Get(1)
-	if v.(string) != "b" {
+	if v != "b" {
 		t.Error("Set 2")
 	}
 
