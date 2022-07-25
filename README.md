@@ -1,8 +1,9 @@
-# sortmap
+# Sortmap
+Sortmap is map where the keys keep the order that they're added.
 
 # Usage
 ```go
-m := sortmap.New[uint]()
+m := sortmap.New[int,string]()
 m.Set(2, "a")
 m.Set(1, "b")
 
